@@ -19,7 +19,7 @@ library(ggridges)
 library(p8105.datasets)
 library(hexbin)
 knitr::opts_chunk$set(
-  fig.width = 18,
+  fig.width = 12,
   fig.asp = .6,
   out.width = "100%"
 )
