@@ -1,0 +1,68 @@
+---
+title: "Visualization 1"
+output: github_document
+---
+
+SETUP
+```{r collapse=TRUE}
+library(tidyverse)
+library(ggridges)
+library(p8105.datasets)
+```
+
+```{r collapse=TRUE}
+data("weather_df")
+```
+
+Basic Scatterplot
+```{r collapse=TRUE}
+ggplot(weather_df, aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+vs
+```{r collapse=TRUE}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+Advanced Scatterplot
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name))
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  geom_smooth(se = FALSE)
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~ name)
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point(aes(size = prcp), alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~ name)
+```
+Learning Assessment
+```{r collapse=TRUE}
+weather_df |> 
+  filter(name == "CentralPark_NY") |> 
+  mutate(
+    tmax_F = (tmax * (9/5)) + 32,
+    tmin_F = (tmin * (9/5)) + 32,
+    tmax_C = tmax,
+    tmin_C = tmin
+  ) |> 
+  select(-tmax, -tmin)
+```
+
+
