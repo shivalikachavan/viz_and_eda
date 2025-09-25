@@ -8,13 +8,14 @@ SETUP
 library(tidyverse)
 library(ggridges)
 library(p8105.datasets)
+library(hexbin)
 ```
 
 ```{r collapse=TRUE}
 data("weather_df")
 ```
 
-Basic Scatterplot
+## Basic Scatterplot
 ```{r collapse=TRUE}
 ggplot(weather_df, aes(x = tmin, y = tmax)) +
   geom_point()
@@ -26,7 +27,7 @@ weather_df |>
   geom_point()
 ```
 
-Advanced Scatterplot
+## Advanced Scatterplot
 ```{r collapse=TRUE}
 weather_df |> 
   ggplot(aes(x = tmin, y = tmax)) + 
@@ -68,4 +69,21 @@ weather_df |>
   geom_smooth(method = "lm", se = FALSE)
 ```
 
+## Odds and Ends
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_smooth(se = FALSE) 
+```
+```{r collapse=TRUE}
+ggplot(weather_df, aes(x = tmax, y = tmin)) + 
+  geom_hex()
+```
+Learning Assessment
+Why don't these two produce the same result?
+```{r collapse=TRUE}
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
+```
+The second line is adding a third aesthetic called color that gets assigned to each dot, rather than coloring points blue. 
 

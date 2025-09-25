@@ -17,13 +17,14 @@ library(tidyverse)
 ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 library(ggridges)
 library(p8105.datasets)
+library(hexbin)
 ```
 
 ``` r
 data("weather_df")
 ```
 
-Basic Scatterplot
+## Basic Scatterplot
 
 ``` r
 ggplot(weather_df, aes(x = tmin, y = tmax)) +
@@ -44,7 +45,7 @@ weather_df |>
 
 ![](template_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-Advanced Scatterplot
+## Advanced Scatterplot
 
 ``` r
 weather_df |> 
@@ -118,3 +119,44 @@ weather_df |>
 ```
 
 ![](template_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+## Odds and Ends
+
+``` r
+weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_smooth(se = FALSE) 
+## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_smooth()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+ggplot(weather_df, aes(x = tmax, y = tmin)) + 
+  geom_hex()
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_binhex()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-11-1.png)<!-- --> Learning
+Assessment Why don’t these two produce the same result?
+
+``` r
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
+## Warning: Removed 17 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
+## Warning: Removed 17 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-12-2.png)<!-- --> The second
+line is adding a third aesthetic called color that gets assigned to each
+dot, rather than coloring points blue.
