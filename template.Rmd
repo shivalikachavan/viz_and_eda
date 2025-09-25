@@ -76,7 +76,8 @@ weather_df |>
   geom_smooth(se = FALSE) 
 ```
 ```{r collapse=TRUE}
-ggplot(weather_df, aes(x = tmax, y = tmin)) + 
+weather_df |> 
+  ggplot(aes(x = tmax, y = tmin)) + 
   geom_hex()
 ```
 Learning Assessment
@@ -87,3 +88,45 @@ ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
 ```
 The second line is adding a third aesthetic called color that gets assigned to each dot, rather than coloring points blue. 
 
+## Univariate Plots
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmax)) + 
+  geom_histogram()
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_histogram(position = "dodge", binwidth = 2)
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_density(alpha = .4, adjust = .5, color = "blue")
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_boxplot()
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), alpha = .5) + 
+  stat_summary(fun = "median", color = "blue")
+```
+```{r collapse=TRUE}
+weather_df |> 
+  ggplot(aes(x = tmax, y = name)) + 
+  geom_density_ridges(scale = .85)
+```
+Learning Assessment
+```{r collapse=TRUE}
+weather_df |> 
+  filter(prcp != 0) |> 
+  ggplot(aes(x = date, y = prcp, color = name)) +
+  geom_point(alpha = 0.5) + 
+  facet_grid(name ~ .) +
+  ylim(0, 1900)
+```
+## Saving and embedding plots

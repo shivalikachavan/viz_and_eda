@@ -134,7 +134,8 @@ weather_df |>
 ![](template_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
-ggplot(weather_df, aes(x = tmax, y = tmin)) + 
+weather_df |> 
+  ggplot(aes(x = tmax, y = tmin)) + 
   geom_hex()
 ## Warning: Removed 17 rows containing non-finite outside the scale range
 ## (`stat_binhex()`).
@@ -160,3 +161,84 @@ ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
 ![](template_files/figure-gfm/unnamed-chunk-12-2.png)<!-- --> The second
 line is adding a third aesthetic called color that gets assigned to each
 dot, rather than coloring points blue.
+
+## Univariate Plots
+
+``` r
+weather_df |> 
+  ggplot(aes(x = tmax)) + 
+  geom_histogram()
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_bin()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+weather_df |> 
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_histogram(position = "dodge", binwidth = 2)
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_bin()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+weather_df |> 
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_density(alpha = .4, adjust = .5, color = "blue")
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_density()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+weather_df |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_boxplot()
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_boxplot()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+weather_df |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), alpha = .5) + 
+  stat_summary(fun = "median", color = "blue")
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_ydensity()`).
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_summary()`).
+## Warning: Removed 3 rows containing missing values or values outside the scale range
+## (`geom_segment()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+weather_df |> 
+  ggplot(aes(x = tmax, y = name)) + 
+  geom_density_ridges(scale = .85)
+## Picking joint bandwidth of 1.54
+## Warning: Removed 17 rows containing non-finite outside the scale range
+## (`stat_density_ridges()`).
+```
+
+![](template_files/figure-gfm/unnamed-chunk-18-1.png)<!-- --> Learning
+Assessment
+
+``` r
+weather_df |> 
+  filter(prcp != 0) |> 
+  ggplot(aes(x = date, y = prcp, color = name)) +
+  geom_point(alpha = 0.5) + 
+  facet_grid(name ~ .) +
+  ylim(0, 1900)
+```
+
+![](template_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
