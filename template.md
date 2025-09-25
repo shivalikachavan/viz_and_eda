@@ -18,6 +18,11 @@ library(tidyverse)
 library(ggridges)
 library(p8105.datasets)
 library(hexbin)
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
 ```
 
 ``` r
@@ -33,7 +38,8 @@ ggplot(weather_df, aes(x = tmin, y = tmax)) +
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-3-1.png)<!-- --> vs
+<img src="template_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
+vs
 
 ``` r
 weather_df |>
@@ -43,7 +49,7 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" />
 
 ## Advanced Scatterplot
 
@@ -55,7 +61,7 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -69,7 +75,7 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -84,7 +90,7 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -99,8 +105,8 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> Learning
-Assessment
+<img src="template_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
+Learning Assessment
 
 ``` r
 weather_df |> 
@@ -118,7 +124,7 @@ weather_df |>
 ## `geom_smooth()` using formula = 'y ~ x'
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-9-1.png" width="90%" />
 
 ## Odds and Ends
 
@@ -131,7 +137,7 @@ weather_df |>
 ## (`stat_smooth()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -141,8 +147,8 @@ weather_df |>
 ## (`stat_binhex()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-11-1.png)<!-- --> Learning
-Assessment Why don’t these two produce the same result?
+<img src="template_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
+Learning Assessment Why don’t these two produce the same result?
 
 ``` r
 ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
@@ -150,7 +156,7 @@ ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />
 
 ``` r
 ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
@@ -158,9 +164,9 @@ ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
 ## (`geom_point()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-12-2.png)<!-- --> The second
-line is adding a third aesthetic called color that gets assigned to each
-dot, rather than coloring points blue.
+<img src="template_files/figure-gfm/unnamed-chunk-12-2.png" width="90%" />
+The second line is adding a third aesthetic called color that gets
+assigned to each dot, rather than coloring points blue.
 
 ## Univariate Plots
 
@@ -173,7 +179,7 @@ weather_df |>
 ## (`stat_bin()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-13-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -183,7 +189,7 @@ weather_df |>
 ## (`stat_bin()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-14-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -193,7 +199,7 @@ weather_df |>
 ## (`stat_density()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-15-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -203,7 +209,7 @@ weather_df |>
 ## (`stat_boxplot()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -218,7 +224,7 @@ weather_df |>
 ## (`geom_segment()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
 
 ``` r
 weather_df |> 
@@ -229,8 +235,8 @@ weather_df |>
 ## (`stat_density_ridges()`).
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-18-1.png)<!-- --> Learning
-Assessment
+<img src="template_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+Learning Assessment
 
 ``` r
 weather_df |> 
@@ -241,4 +247,25 @@ weather_df |>
   ylim(0, 1900)
 ```
 
-![](template_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+<img src="template_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
+\## Saving and embedding plots
+
+``` r
+ggp_weather = 
+  ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) 
+
+ggsave("ggp_weather.pdf", ggp_weather, width = 8, height = 5)
+## Warning: Removed 17 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+```
+
+``` r
+fig.width = 12
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name))
+## Warning: Removed 17 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+```
+
+<img src="template_files/figure-gfm/unnamed-chunk-21-1.png" width="90%" />
