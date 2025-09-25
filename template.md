@@ -100,3 +100,21 @@ weather_df |>
 
 ![](template_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> Learning
 Assessment
+
+``` r
+weather_df |> 
+  filter(name == "CentralPark_NY") |> 
+  mutate(
+    tmax_F = (tmax * (9/5)) + 32,
+    tmin_F = (tmin * (9/5)) + 32,
+    tmax_C = tmax,
+    tmin_C = tmin
+  ) |> 
+  select(-tmax, -tmin) |> 
+  ggplot(aes(x = tmin_F, y = tmax_F)) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = "lm", se = FALSE)
+## `geom_smooth()` using formula = 'y ~ x'
+```
+
+![](template_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
