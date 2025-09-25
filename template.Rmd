@@ -12,7 +12,7 @@ library(hexbin)
 knitr::opts_chunk$set(
   fig.width = 18,
   fig.asp = .6,
-  out.width = "90%"
+  out.width = "100%"
 )
 ```
 
