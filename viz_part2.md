@@ -13,6 +13,23 @@ library(tidyverse)
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
 library(patchwork)
 library(p8105.datasets)
 data("weather_df")
@@ -28,7 +45,7 @@ weather_df |>
 ## (`geom_point()`).
 ```
 
-![](viz_part2_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-1-1.png" width="90%" />
 
 #### Labels
 
@@ -48,7 +65,7 @@ weather_df |>
     ## Warning: Removed 17 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](viz_part2_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-2-1.png" width="90%" />
 
 #### Scale
 
@@ -74,7 +91,7 @@ weather_df |>
     ## Warning: Removed 17 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](viz_part2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
 
 #### Color Palette
 
@@ -102,4 +119,70 @@ weather_df |>
     ## Warning: Removed 17 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
-![](viz_part2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" />
+
+#### Themes
+
+Make my base plot
+
+``` r
+ggp_temp = weather_df |> 
+  # filter(tmax>10, tmax<30) |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) + 
+  labs(
+    x = "Minimum daily temperature (C)",
+    y = "Maxiumum daily temperature (C)",
+    title = "Temperature scatterplot",
+    caption = "Data from NOAA",
+    color = "Location"
+  ) +
+  scale_x_continuous(
+    breaks = c(-20, 0, 25),
+    labels = c("-20C", "0", "25")
+  ) + 
+  viridis::scale_color_viridis(
+    discrete = TRUE
+  )
+```
+
+Update base plot
+
+``` r
+ggp_temp +
+  # theme_dark() +
+  # theme_bw() +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 17 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
+
+#### Setting Options
+
+Added to setup chunk
+
+#### Adding data in geoms
+
+``` r
+central_park_df =
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+molokai_df =
+  weather_df |> 
+  filter(name == "Molokai_HI")
+
+ggplot(data = molokai_df, aes(x = date, y = tmax)) +
+  geom_point() +
+  geom_line(data = central_park_df)
+```
+
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
+
+#### Patchwork
