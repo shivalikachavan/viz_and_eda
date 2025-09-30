@@ -265,3 +265,86 @@ weather_df |>
     ## (`stat_ydensity()`).
 
 <img src="viz_part2_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
+
+What about tidiness???
+
+``` r
+pulse_df = 
+  haven::read_sas("./data/data_import_examples/public_pulse_data.sas7bdat") |> 
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") |> 
+  mutate(
+    visit = fct_inorder(visit)
+  )
+
+pulse_df |> 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+```
+
+    ## Warning: Removed 879 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
+
+``` r
+pup_data = 
+  read_csv("./data/data_import_examples/FAS_pups.csv", na = c("NA", ".", ""), skip = 3) |>
+  janitor::clean_names() |>
+  mutate(
+    sex = 
+      case_match(
+        sex, 
+        1 ~ "male", 
+        2 ~ "female"))
+```
+
+    ## Rows: 313 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (1): Litter Number
+    ## dbl (5): Sex, PD ears, PD eyes, PD pivot, PD walk
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litter_data = 
+  read_csv("./data/data_import_examples/FAS_litters.csv", na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  separate(group, into = c("dose", "tx_day"), sep = 3)
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (2): Group, Litter Number
+    ## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+fas_data = left_join(pup_data, litter_data, by = "litter_number") 
+
+fas_data_plotting = fas_data |> 
+  select(sex, dose, tx_day, pd_ears:pd_walk) |> 
+  pivot_longer(
+    pd_ears:pd_walk,
+    names_to = "outcome", 
+    names_prefix = "pd_",
+    values_to = "pn_day") |> 
+  drop_na() |> 
+  mutate(outcome = fct_reorder(outcome, pn_day, median))
+
+fas_data_plotting |> 
+  ggplot(aes(x = dose, y = pn_day)) + 
+  geom_violin() + 
+  facet_grid(tx_day ~ outcome)
+```
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />

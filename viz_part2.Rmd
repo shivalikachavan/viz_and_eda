@@ -189,3 +189,56 @@ weather_df |>
   geom_violin(alpha = 0.5)
 ```
 
+What about tidiness???
+```{r}
+pulse_df = 
+  haven::read_sas("./data/data_import_examples/public_pulse_data.sas7bdat") |> 
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") |> 
+  mutate(
+    visit = fct_inorder(visit)
+  )
+
+pulse_df |> 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+```
+
+```{r}
+pup_data = 
+  read_csv("./data/data_import_examples/FAS_pups.csv", na = c("NA", ".", ""), skip = 3) |>
+  janitor::clean_names() |>
+  mutate(
+    sex = 
+      case_match(
+        sex, 
+        1 ~ "male", 
+        2 ~ "female"))
+
+litter_data = 
+  read_csv("./data/data_import_examples/FAS_litters.csv", na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  separate(group, into = c("dose", "tx_day"), sep = 3)
+
+fas_data = left_join(pup_data, litter_data, by = "litter_number") 
+
+fas_data_plotting = fas_data |> 
+  select(sex, dose, tx_day, pd_ears:pd_walk) |> 
+  pivot_longer(
+    pd_ears:pd_walk,
+    names_to = "outcome", 
+    names_prefix = "pd_",
+    values_to = "pn_day") |> 
+  drop_na() |> 
+  mutate(outcome = fct_reorder(outcome, pn_day, median))
+
+fas_data_plotting |> 
+  ggplot(aes(x = dose, y = pn_day)) + 
+  geom_violin() + 
+  facet_grid(tx_day ~ outcome)
+```
+
