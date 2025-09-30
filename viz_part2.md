@@ -224,3 +224,44 @@ ggp_temp_season =
     ## (`geom_point()`).
 
 <img src="viz_part2_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
+
+#### Data Manipulation
+
+Temp Violin Plot
+
+``` r
+weather_df |> 
+  mutate(
+    name = fct_relevel(name, c("Molokai_HI", "CentralPark_NY", "Waterhole_WA"))
+  ) |> 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-9-1.png" width="90%" />
+
+Reordering based on another variable
+
+``` r
+weather_df |> 
+  mutate(
+    name = fct_reorder(name, tmax)
+  )|> 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+    ## Warning: There was 1 warning in `mutate()`.
+    ## ℹ In argument: `name = fct_reorder(name, tmax)`.
+    ## Caused by warning:
+    ## ! `fct_reorder()` removing 17 missing values.
+    ## ℹ Use `.na_rm = TRUE` to silence this message.
+    ## ℹ Use `.na_rm = FALSE` to preserve NAs.
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
