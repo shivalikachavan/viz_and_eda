@@ -186,3 +186,41 @@ ggplot(data = molokai_df, aes(x = date, y = tmax)) +
 <img src="viz_part2_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
 
 #### Patchwork
+
+Make 3 plots and combine using patchwork
+
+``` r
+ggp_tmax_tmin = 
+  weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+ggp_prec_density = 
+  weather_df |> 
+  filter(prcp > 0) |> 
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = .5) + 
+  theme(legend.position = "none")
+
+ggp_temp_season = 
+  weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  theme(legend.position = "bottom")
+
+(ggp_tmax_tmin + ggp_prec_density) / ggp_temp_season
+```
+
+    ## Warning: Removed 17 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+    ## Removed 17 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
