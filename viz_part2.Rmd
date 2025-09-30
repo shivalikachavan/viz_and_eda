@@ -3,149 +3,73 @@ title: "Visualization 2"
 output: github_document
 ---
 
-```{r setup}
+```{r setup, collapse=TRUE}
 library(tidyverse)
-library(ggridges)
+library(patchwork)
 library(p8105.datasets)
-library(hexbin)
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "95%"
-)
-```
-
-```{r collapse=TRUE}
 data("weather_df")
 ```
 
-## Basic Scatterplot
-```{r collapse=TRUE}
-ggplot(weather_df, aes(x = tmin, y = tmax)) +
-  geom_point()
-```
-vs
-```{r collapse=TRUE}
-weather_df |>
-  ggplot(aes(x = tmin, y = tmax)) + 
-  geom_point()
-```
-
-## Advanced Scatterplot
+Revisit plot from part 1
 ```{r collapse=TRUE}
 weather_df |> 
   ggplot(aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name))
+  geom_point(aes(color = name), alpha = .5)
 ```
-```{r collapse=TRUE}
+
+#### Labels
+```{r}
 weather_df |> 
   ggplot(aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name), alpha = .5) +
-  geom_smooth(se = FALSE)
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmin, y = tmax, color = name)) + 
-  geom_point(alpha = .5) +
-  geom_smooth(se = FALSE) + 
-  facet_grid(. ~ name)
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = date, y = tmax, color = name)) + 
-  geom_point(aes(size = prcp), alpha = .5) +
-  geom_smooth(se = FALSE) + 
-  facet_grid(. ~ name)
-```
-Learning Assessment
-```{r collapse=TRUE}
-weather_df |> 
-  filter(name == "CentralPark_NY") |> 
-  mutate(
-    tmax_F = (tmax * (9/5)) + 32,
-    tmin_F = (tmin * (9/5)) + 32,
-    tmax_C = tmax,
-    tmin_C = tmin
-  ) |> 
-  select(-tmax, -tmin) |> 
-  ggplot(aes(x = tmin_F, y = tmax_F)) +
-  geom_point(alpha = 0.5) + 
-  geom_smooth(method = "lm", se = FALSE)
+  geom_point(aes(color = name), alpha = .5) + 
+  labs(
+    x = "Minimum daily temperature (C)",
+    y = "Maxiumum daily temperature (C)",
+    title = "Temperature scatterplot",
+    caption = "Data from NOAA",
+    color = "Location"
+  )
 ```
 
-## Odds and Ends
-```{r collapse=TRUE}
+#### Scale
+```{r}
 weather_df |> 
-  ggplot(aes(x = date, y = tmax, color = name)) + 
-  geom_smooth(se = FALSE) 
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmax, y = tmin)) + 
-  geom_hex()
-```
-Learning Assessment
-Why don't these two produce the same result?
-```{r collapse=TRUE}
-ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
-ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
-```
-The second line is adding a third aesthetic called color that gets assigned to each dot, rather than coloring points blue. 
-
-## Univariate Plots
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmax)) + 
-  geom_histogram()
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmax, fill = name)) + 
-  geom_histogram(position = "dodge", binwidth = 2)
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmax, fill = name)) + 
-  geom_density(alpha = .4, adjust = .5, color = "blue")
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = name, y = tmax)) + 
-  geom_boxplot()
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = name, y = tmax)) + 
-  geom_violin(aes(fill = name), alpha = .5) + 
-  stat_summary(fun = "median", color = "blue")
-```
-```{r collapse=TRUE}
-weather_df |> 
-  ggplot(aes(x = tmax, y = name)) + 
-  geom_density_ridges(scale = .85)
-```
-Learning Assessment
-```{r collapse=TRUE}
-weather_df |> 
-  filter(prcp != 0) |> 
-  ggplot(aes(x = date, y = prcp, color = name)) +
-  geom_point(alpha = 0.5) + 
-  facet_grid(name ~ .) +
-  ylim(0, 1900)
-```
-## Saving and embedding plots
-```{r collapse=TRUE}
-ggp_weather = 
-  ggplot(weather_df, aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name), alpha = .5) 
-
-ggsave("ggp_weather.pdf", ggp_weather, width = 8, height = 5)
+  # filter(tmax>10, tmax<30) |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) + 
+  labs(
+    x = "Minimum daily temperature (C)",
+    y = "Maxiumum daily temperature (C)",
+    title = "Temperature scatterplot",
+    caption = "Data from NOAA",
+    color = "Location"
+  ) +
+  scale_x_continuous(
+    breaks = c(-20, 0, 25),
+    labels = c("-20C", "0", "25")
+  ) +
+  scale_color_hue(h = c(100, 300))
 ```
 
-```{r collapse=TRUE}
-fig.width = 12
-ggplot(weather_df, aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name))
+#### Color Palette
+```{r}
+weather_df |> 
+  # filter(tmax>10, tmax<30) |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) + 
+  labs(
+    x = "Minimum daily temperature (C)",
+    y = "Maxiumum daily temperature (C)",
+    title = "Temperature scatterplot",
+    caption = "Data from NOAA",
+    color = "Location"
+  ) +
+  scale_x_continuous(
+    breaks = c(-20, 0, 25),
+    labels = c("-20C", "0", "25")
+  ) + 
+  viridis::scale_color_viridis(
+    discrete = TRUE
+  )
 ```
-
 
