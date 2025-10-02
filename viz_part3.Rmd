@@ -5,6 +5,7 @@ output: github_document
 
 ```{r setup, collapse=TRUE}
 library(tidyverse)
+library(p8105.datasets)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -21,9 +22,118 @@ options(
 
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
-
-library(patchwork)
-library(p8105.datasets)
-data("weather_df")
 ```
 
+```{r}
+data("weather_df")
+
+weather_df = 
+  weather_df |>
+  mutate(
+    month = lubridate::floor_date(date, unit = "month")
+    )
+```
+#### Initial Numeric Explorations
+```{r}
+weather_df |> 
+  ggplot(aes(x = prcp)) +
+  geom_histogram()
+```
+
+Check extreme values
+```{r}
+weather_df |> 
+  filter(prcp >= 1000)
+```
+
+Closer look with scatter plot
+```{r}
+weather_df |> 
+  filter(tmax >= 20, tmax <= 30) |> 
+  ggplot(aes(x = tmin, y = tmax, color = name, shape = name)) + 
+  geom_point(alpha = .75)
+```
+
+#### group_by
+```{r}
+weather_df |>
+  group_by(name, month)
+```
+
+Grouping and counting
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  summarize(
+    n = n()
+  )
+```
+
+```{r}
+weather_df |> 
+  group_by(name, month) |> 
+  summarize(
+    n = n()
+  )
+```
+
+```{r}
+weather_df |> 
+  group_by(name, month) |> 
+  summarize(
+    n = n()
+  )
+```
+
+```{r}
+weather_df |> 
+  group_by(month) |> 
+  summarize(
+    n = n_distinct(date)
+  )
+```
+
+```{r}
+weather_df |>
+  count(month, name = "n")
+```
+
+
+More interesting summaries. Compute some extra stuff
+```{r}
+weather_df |>
+  group_by(name, month) |>
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    median_tmix = median(tmin, na.rm = TRUE),
+    sd_prcp = sd(prcp, na.rm = TRUE)
+    )
+```
+This is still a data frame!
+```{r}
+weather_df |>
+  group_by(name, month) |> 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE)
+    ) |> 
+  ggplot(aes(x = month, y = mean_tmax, color = name)) + 
+  geom_point() +
+  geom_line()
+```
+
+Sometime formatting is nice (for human eyes, may be less tidy for computer)
+```{r}
+weather_df |>
+  group_by(name, month) |> 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE)
+    ) |> 
+  pivot_wider(
+    names_from = name,
+    values_from = mean_tmax
+  ) |> 
+  knitr::kable(digits = 2)
+```
+
+
+#### Initial Numeric Explorations
