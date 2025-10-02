@@ -135,5 +135,90 @@ weather_df |>
   knitr::kable(digits = 2)
 ```
 
+#### mutate with groups
+This computes a single mean for all observations...who would want that
+```{r}
+weather_df |> 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE)
+  )
+```
+so you can group
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE), 
+    center_tmax = tmax - mean_tmax
+  ) |> 
+  ggplot(aes(x = date, y = center_tmax, color = name)) +
+  geom_point(alpha = 0.5)
+```
 
-#### Initial Numeric Explorations
+Look for cold days
+```{r}
+weather_df |> 
+  group_by(name, month) |> 
+  mutate(temp_rank = min_rank(desc(tmin))) |> 
+  filter(temp_rank < 2)
+```
+
+What about lags?
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(lagged_tmax = lag(tmax))
+```
+
+Use the variables you make
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    temp_change = tmax - lag(tmax)
+  ) |> 
+  summarize(
+    sd_tmax_change = sd(temp_change, na.rm = TRUE),
+    tmax_change_max = max(temp_change, na.rm = TRUE)
+  )
+```
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    temp_change = tmax - lag(tmax),
+    change_rank = min_rank(desc(temp_change))
+  ) |> 
+  filter(
+    change_rank < 2
+  )
+```
+
+Revisit PULSE
+```{r}
+pulse_df = 
+  haven::read_sas("./data/data_import_examples/public_pulse_data.sas7bdat") |> 
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") |> 
+  mutate(
+    visit = fct_inorder(visit)
+  )
+
+pulse_df |> 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+
+pulse_df |> 
+  group_by(visit) |> 
+  summarize(
+    mean_bdi = mean(bdi, na.rm = TRUE),
+    median_bdi = median(bdi, na.rm = TRUE)
+  ) |> 
+  knitr::kable(digits = 2)
+```
+
